@@ -1,0 +1,119 @@
+body {
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #fff;
+    font-family: Arial, sans-serif;
+    color: #333;
+}
+
+.container {
+    width: 360px;
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: 0 24px 60px rgba(0, 0, 0, 0.15);
+    padding: 30px;
+}
+
+h1 {
+    margin: 0 0 18px;
+    font-size: 22px;
+    text-align: center;
+}
+
+.tabs {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 18px;
+}
+
+.tab-button {
+    flex: 1;
+    padding: 10px 0;
+    border: 1px solid #ddd;
+    background: #f8f8f8;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background 0.2s ease;
+    text-align: center;
+}
+
+.tab-button.active {
+    background: #5f5e5e;
+    color: #333;
+    border-color: #5f5e5e;
+}
+
+.form-group {
+    margin-bottom: 14px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 6px;
+    font-size: 14px;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    font-size: 14px;
+    box-sizing: border-box;
+}
+
+button {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 12px;
+    background: #4a90e2;
+    color: #fff;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background 0.2s ease;
+}
+
+button:hover {
+    background: #3a78c2;
+}
+
+.message {
+    margin-top: 18px;
+    padding: 12px 14px;
+    border-radius: 10px;
+    display: none;
+}
+
+.message.success {
+    background: #e7f9f3;
+    color: #1b6f4c;
+    display: block;
+}
+
+.message.error {
+    background: #ffe9e9;
+    color: #a52a2a;
+    display: block;
+}
+
+.profile {
+    text-align: center;
+}
+
+.profile p {
+    margin: 8px 0;
+}
+
+.logout-button {
+    margin-top: 12px;
+    background: #ff5b5b;
+}
+
+.logout-button:hover {
+    background: #ff3f3f;
+}
