@@ -1,3 +1,5 @@
+const APP_BASE_PATH = getAppBasePath();
+
 let catalogProducts = [];
 let favoriteIdsCache = [];
 let catalogPage = 0;
@@ -5,6 +7,50 @@ let catalogPageSize = 8;
 let catalogTotalPages = 1;
 let catalogIsLoading = false;
 let catalogInfiniteScrollListenerAdded = false;
+
+function getAppBasePath() {
+    const baseElement = document.querySelector('base[href]');
+    if (baseElement) {
+        const href = baseElement.getAttribute('href') || '/';
+        try {
+            const url = new URL(href, window.location.origin);
+            return url.pathname.replace(/\/+$|^\s+|\s+$/g, '') || '/';
+        } catch (e) {
+            return '/';
+        }
+    }
+
+    const path = window.location.pathname;
+    const segments = path.split('/').filter(Boolean);
+    if (segments.length === 0) {
+        return '/';
+    }
+    return `/${segments[0]}`;
+}
+
+function getRoutePath(path = window.location.pathname) {
+    if (!path) {
+        return '/';
+    }
+    if (APP_BASE_PATH !== '/' && path.startsWith(APP_BASE_PATH)) {
+        const relative = path.slice(APP_BASE_PATH.length) || '/';
+        return relative.startsWith('/') ? relative : `/${relative}`;
+    }
+    return path;
+}
+
+function makeAppPath(route) {
+    if (!route || route === '/') {
+        return APP_BASE_PATH === '/' ? '/' : `${APP_BASE_PATH}/`;
+    }
+    if (route.startsWith(APP_BASE_PATH)) {
+        return route;
+    }
+    if (route.startsWith('/')) {
+        return APP_BASE_PATH === '/' ? route : `${APP_BASE_PATH}${route}`;
+    }
+    return APP_BASE_PATH === '/' ? `/${route}` : `${APP_BASE_PATH}/${route}`;
+}
 
 function formatPriceUSD(price) {
     if (price == null || isNaN(price)) {
@@ -24,7 +70,7 @@ async function loadFavoritesCache() {
 
 async function refreshFavoritesState() {
     await loadFavoritesCache();
-    const path = window.location.pathname.replace(/\/+$|^\s+|\s+$/g, "");
+    const path = getRoutePath(window.location.pathname).replace(/\/+$|^\s+|\s+$/g, "");
 
     if (path === "/catalog") {
         renderCatalog(catalogProducts);
@@ -47,7 +93,7 @@ async function clearFavoritesState() {
         updateFavoriteButton(btn, false);
     });
 
-    const path = window.location.pathname.replace(/\/+$|^\s+|\s+$/g, "");
+    const path = getRoutePath(window.location.pathname).replace(/\/+$|^\s+|\s+$/g, "");
     if (path === "/catalog") {
         renderCatalog(catalogProducts);
     } else if (path.startsWith("/product/")) {
@@ -91,11 +137,11 @@ async function removeFromFavorites(productId) {
     await loadFavoritesCache();
 
     // обновляем UI
-    if (window.location.pathname === "/favorites") {
+    if (getRoutePath(window.location.pathname) === "/favorites") {
         renderFavoritesPage();
     }
 
-    if (window.location.pathname === "/profile") {
+    if (getRoutePath(window.location.pathname) === "/profile") {
         renderFavoritesInProfile();
     }
 
@@ -188,7 +234,7 @@ function initCatalogInfiniteScroll() {
     catalogInfiniteScrollListenerAdded = true;
 
     window.addEventListener('scroll', async () => {
-        if (window.location.pathname !== '/catalog') return;
+        if (getRoutePath(window.location.pathname) !== '/catalog') return;
         if (catalogIsLoading || catalogPage >= catalogTotalPages - 1) return;
 
         const nearBottom = window.innerHeight + window.scrollY >= document.body.offsetHeight - 240;
@@ -227,8 +273,9 @@ document.addEventListener("DOMContentLoaded", async () => {
 
 // Навигация (Клиентский Роутер)
 function navigateTo(path) {
-    window.history.pushState({}, "", path);
-    routeFrontend(path);
+    const target = makeAppPath(path);
+    window.history.pushState({}, "", target);
+    routeFrontend(target);
 }
 
 async function renderFavoritesPage() {
@@ -283,7 +330,7 @@ async function renderFavoritesPage() {
 }
 
 async function routeFrontend(path) {
-    path = path.replace(/\/+$|^\s+|\s+$/g, "");
+    path = getRoutePath(path).replace(/\/+$|^\s+|\s+$/g, "");
     if (path === "") {
         path = "/";
     }
@@ -520,7 +567,7 @@ function initCatalogControls() {
         if (catalogProducts.length === 0) {
             await loadCatalogProducts();
         }
-        if (window.location.pathname !== "/catalog") {
+        if (getRoutePath(window.location.pathname) !== "/catalog") {
             navigateTo("/catalog");
         } else {
             applyCatalogFilters();
@@ -769,7 +816,7 @@ async function loadAdminProducts() {
                     await loadAdminProducts();
                     await loadAdminUsers();
                     await loadCatalogProducts();
-                    if (window.location.pathname === "/" || window.location.pathname === "") {
+                    if (getRoutePath(window.location.pathname) === "/" || getRoutePath(window.location.pathname) === "") {
                         renderCatalog(catalogProducts);
                     }
                 }
@@ -901,7 +948,7 @@ async function addNewProduct() {
         document.getElementById('admin-product-description').value = '';
         await loadAdminProducts();
         await loadCatalogProducts();
-        if (window.location.pathname === "/" || window.location.pathname === "") {
+        if (getRoutePath(window.location.pathname) === "/" || getRoutePath(window.location.pathname) === "") {
             renderCatalog(catalogProducts);
         } 
     }
