@@ -3,56 +3,207 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ByteClub - Регистрация / Вход</title>
-    <link rel="stylesheet" href="/css/style.css">
+    <title>ByteClub — Магазин цифровой техники</title>
+    <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-    <div class="container">
-        <h1>ByteClub</h1>
-
-        <div class="tabs">
-            <div id="tab-register" class="tab-button active" onclick="showTab('register')">Регистрация</div>
-            <div id="tab-login" class="tab-button" onclick="showTab('login')">Вход</div>
+    <header>
+        <div class="header-container">
+            <div class="logo" onclick="navigateTo('/')">ByteClub</div>
+            <div class="header-search" id="header-search">
+                <input type="text" id="header-search-input" placeholder="Найти товар...">
+                <button id="header-search-btn" class="product-button text-btn">Найти</button>
+            </div>
+            <nav>
+                <a href="/catalog" onclick="navigateTo('/catalog'); return false;">Каталог</a>
+                <a href="/cart" onclick="navigateTo('/cart'); return false;" id="nav-cart-link">Корзина</a>
+                 <a href="/favorites" onclick="navigateTo('/favorites'); return false;">Избранное</a>
+                <a href="/profile" onclick="navigateTo('/profile'); return false;" id="nav-profile-link" style="display: none;">Личный кабинет</a>
+               
+                <a href="/admin" onclick="navigateTo('/admin'); return false;" id="nav-admin-link" style="display: none;">Админ</a>
+               
+                <a href="/auth" onclick="navigateTo('/auth'); return false;" id="nav-auth-link">Войти</a>
+            </nav>
         </div>
+    </header>
 
-        <div id="register-form">
-            <div class="form-group">
-                <label for="register-username">Логин</label>
-                <input id="register-username" type="text" placeholder="Введите логин">
-            </div>
-            <div class="form-group">
-                <label for="register-email">Email</label>
-                <input id="register-email" type="email" placeholder="Введите email">
-            </div>
-            <div class="form-group">
-                <label for="register-password">Пароль</label>
-                <input id="register-password" type="password" placeholder="Введите пароль">
-            </div>
-            <button onclick="submitRegister()">Зарегистрироваться</button>
-        </div>
+    <main class="main-container">
+        <section id="home-page" class="page-section">
+            <h2>Добро пожаловать</h2>
+        </section>
 
-        <div id="login-form" style="display: none;">
-            <div class="form-group">
-                <label for="login-username">Логин</label>
-                <input id="login-username" type="text" placeholder="Введите логин">
+        <section id="favorites-page" class="page-section" style="display: none;">
+            <div class="favorites-container">
+                <h2>Моё Избранное</h2>
+                <div id="favorites-page-container" class="products-grid">
+                    </div>
             </div>
-            <div class="form-group">
-                <label for="login-password">Пароль</label>
-                <input id="login-password" type="password" placeholder="Введите пароль">
+        </section>
+
+        <section id="catalog-page" class="page-section" style="display: none;">
+            <h2>Каталог товаров</h2>
+            <div class="catalog-controls">
+                <div class="catalog-sort-container">
+                    <label for="catalog-sort-select">Сортировка:</label>
+                    <select id="catalog-sort-select">
+                        <option value="">Без сортировки</option>
+                        <option value="price-asc">Цена ↑</option>
+                        <option value="price-desc">Цена ↓</option>
+                        <option value="name-asc">Название A–Я</option>
+                        <option value="name-desc">Название Я–A</option>
+                    </select>
+                </div>
+                <div id="catalog-status" class="catalog-status">Страница 1</div>
             </div>
-            <button onclick="submitLogin()">Войти</button>
-        </div>
+            <div id="catalog-container" class="products-grid"></div>
+            <div id="catalog-loading" class="catalog-loading" style="display:none;">
+                <span class="loader-spinner"></span>Загрузка...
+            </div>
+        </section>
 
-        <div id="profile" class="profile" style="display: none;">
-            <p id="profile-text"></p>
-            <button class="logout-button" onclick="logout()">Выйти</button>
-        </div>
+        <section id="auth-page" class="page-section" style="display: none;">
+            <div class="auth-container">
+                <div id="login-box">
+                    <h2>Вход в аккаунт</h2>
+                    <form id="login-form" onsubmit="event.preventDefault(); submitLogin();">
+                        <div class="form-group">
+                            <label for="login-username">Имя пользователя</label>
+                            <input type="text" id="login-username" required autocomplete="username">
+                        </div>
+                        <div class="form-group">
+                            <label for="login-password">Пароль</label>
+                            <input type="password" id="login-password" required autocomplete="current-password">
+                        </div>
+                        <button type="submit" class="product-button">Войти</button>
+                    </form>
+                    <p class="auth-switch">
+                        <a href="#" onclick="switchAuthMode('restore'); return false;">Забыли пароль?</a>
+                    </p>
+                    <p class="auth-switch">Нет аккаунта? <a href="#" onclick="switchAuthMode('register'); return false;">Зарегистрироваться</a></p>
+                </div>
 
-        <div id="message" class="message"></div>
-    </div>
+                <div id="register-box" style="display: none;">
+                    <h2>Регистрация</h2>
+                    <form id="register-form" onsubmit="event.preventDefault(); submitRegister();">
+                        <div class="form-group">
+                            <label for="register-username">Имя пользователя</label>
+                            <input type="text" id="register-username" required autocomplete="username">
+                        </div>
+                        <div class="form-group">
+                            <label for="register-email">Email</label>
+                            <input type="email" id="register-email" required autocomplete="email">
+                        </div>
+                        <div class="form-group">
+                            <label for="register-password">Пароль</label>
+                            <input type="password" id="register-password" required autocomplete="new-password">
+                        </div>
+                        <div class="form-group">
+                            <label for="register-recovery-keyword">Ключевое слово для восстановления</label>
+                            <input type="text" id="register-recovery-keyword" required autocomplete="off" placeholder="Введите ключевое слово">
+                        </div>
+                        <button type="submit" class="product-button">Создать аккаунт</button>
+                    </form>
+                    <p class="auth-switch">Уже есть аккаунт? <a href="#" onclick="switchAuthMode('login'); return false;">Войти</a></p>
+                </div>
+
+                <div id="restore-box" style="display: none;">
+                    <h2>Восстановление пароля</h2>
+                    <form id="restore-form" onsubmit="event.preventDefault(); submitRestore();">
+                        <div class="form-group">
+                            <label for="restore-username-or-email">Логин или Email</label>
+                            <input type="text" id="restore-username-or-email" required autocomplete="username">
+                        </div>
+                        <div class="form-group">
+                            <label for="restore-keyword">Ключевое слово</label>
+                            <input type="text" id="restore-keyword" required autocomplete="off" placeholder="Введите ключевое слово">
+                        </div>
+                        <div class="form-group">
+                            <label for="restore-password">Новый пароль</label>
+                            <input type="password" id="restore-password" required autocomplete="new-password">
+                        </div>
+                        <button type="submit" class="product-button">Восстановить</button>
+                    </form>
+                    <p class="auth-switch">Вспомнили пароль? <a href="#" onclick="switchAuthMode('login'); return false;">Войти</a></p>
+                    <p class="auth-switch">Нет аккаунта? <a href="#" onclick="switchAuthMode('register'); return false;">Зарегистрироваться</a></p>
+                </div>
+                <div id="auth-error" class="error-message" style="display: none;"></div>
+            </div>
+        </section>
+
+        <section id="profile-page" class="page-section" style="display: none;">
+            <div class="profile-header">
+                <h2>Личный кабинет</h2>
+                <button onclick="handleLogout()" class="logout-btn">Выйти</button>
+            </div>
+            <div id="user-info-block" class="user-info-card"></div>
+
+            
+        </section>
+
+        <section id="cart-page" class="page-section" style="display: none;">
+            <div class="cart-container">
+                <h2>Ваша корзина</h2>
+                
+                <div id="cart-content" class="cart-wrapper">
+                    <div id="cart-items-list" class="cart-items-list">
+                        </div>
+
+                    <div class="cart-summary-panel">
+                        <h3>Итог заказа</h3>
+                        <div class="summary-row">
+                            <span>Товары (<span id="cart-total-count">0</span>):</span>
+                            <strong id="cart-subtotal-price">$0</strong>
+                        </div>
+                        <div class="summary-row">
+                            <span>Доставка:</span>
+                            <span class="delivery-free">Бесплатно</span>
+                        </div>
+                        <hr class="summary-divider">
+                        <div class="summary-row total-row">
+                            <span>К оплате:</span>
+                            <span id="cart-final-price">$0</span>
+                        </div>
+                        <!-- Checkout temporarily removed -->
+                    </div>
+                </div>
+
+                <div id="cart-empty-state" class="cart-empty" style="display: none;">
+                    <div class="empty-icon">🛒</div>
+                    <h3>В корзине пока ничего нет</h3>
+                    <p>Ознакомьтесь с нашим каталогом, чтобы найти лучшие цифровые новинки.</p>
+                    <button onclick="navigateTo('/catalog')" class="product-button text-btn">
+                        Перейти в каталог
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <section id="admin-page" class="page-section" style="display: none;">
+            <div id="admin-container">
+                <h2>Админ-панель</h2>
+                <p id="admin-warning" style="color: #c00; display: none;">Доступ запрещён. Требуется аккаунт администратора.</p>
+                <div id="admin-controls" style="display: none;">
+                    <p>Здесь будут административные инструменты (управление товарами, пользователями и т.п.).</p>
+                    <div id="admin-tools"></div>
+                </div>
+            </div>
+        </section>
+
+        <section id="product-detail-page" class="page-section" style="display: none;">
+            <div id="product-detail-container"></div>
+        </section>
+
+        <section id="not-found-page" class="page-section" style="display: none;">
+            <div class="error-404">
+                <h2>404</h2>
+                <p>Страница не найдена. Возможно, она была удалена или перенесена.</p>
+                <button onclick="navigateTo('/')" class="product-button text-btn">Перейти на главную</button>
+            </div>
+        </section>
+    </main>
 
     <script src="/js/api.js"></script>
-    <script src="/js/ui.js"></script>
     <script src="/js/auth.js"></script>
+    <script src="/js/ui.js"></script>
 </body>
-</html>
+</html> 
