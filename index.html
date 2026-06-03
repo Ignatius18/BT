@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ByteClub — Магазин цифровой техники</title>
+    <base href="/BT/">
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
@@ -15,14 +16,14 @@
                 <button id="header-search-btn" class="product-button text-btn">Найти</button>
             </div>
             <nav>
-                <a href="/catalog" onclick="navigateTo('/catalog'); return false;">Каталог</a>
-                <a href="/cart" onclick="navigateTo('/cart'); return false;" id="nav-cart-link">Корзина</a>
-                 <a href="/favorites" onclick="navigateTo('/favorites'); return false;">Избранное</a>
-                <a href="/profile" onclick="navigateTo('/profile'); return false;" id="nav-profile-link" style="display: none;">Личный кабинет</a>
+                <a href="catalog" onclick="navigateTo('/catalog'); return false;">Каталог</a>
+                <a href="cart" onclick="navigateTo('/cart'); return false;" id="nav-cart-link">Корзина</a>
+                 <a href="favorites" onclick="navigateTo('/favorites'); return false;">Избранное</a>
+                <a href="profile" onclick="navigateTo('/profile'); return false;" id="nav-profile-link" style="display: none;">Личный кабинет</a>
                
-                <a href="/admin" onclick="navigateTo('/admin'); return false;" id="nav-admin-link" style="display: none;">Админ</a>
+                <a href="admin" onclick="navigateTo('/admin'); return false;" id="nav-admin-link" style="display: none;">Админ</a>
                
-                <a href="/auth" onclick="navigateTo('/auth'); return false;" id="nav-auth-link">Войти</a>
+                <a href="auth" onclick="navigateTo('/auth'); return false;" id="nav-auth-link">Войти</a>
             </nav>
         </div>
     </header>
@@ -202,8 +203,8 @@
         </section>
     </main>
 
-    <script src="/js/api.js"></script>
-    <script src="/js/auth.js"></script>
-    <script src="/js/ui.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/ui.js"></script>
 </body>
 </html> 
