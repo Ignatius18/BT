@@ -1,6 +1,12 @@
 package com.mybyteclub.byteclub.model;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
 
 @Entity
 @Table(name = "users", uniqueConstraints = {
@@ -22,6 +28,10 @@ public class User {
     @Column(nullable = false)
     private String password;
 
+    @Column(nullable = true)
+    private String recoveryKeywordHash;
+    
+
     public User() {
     }
 
@@ -30,6 +40,15 @@ public class User {
         this.email = email;
         this.password = password;
     }
+
+    public User(String username, String email, String password, String recoveryKeywordHash) {
+        this.username = username;
+        this.email = email;
+        this.password = password;
+        this.recoveryKeywordHash = recoveryKeywordHash;
+    }
+
+    
 
     public Long getId() {
         return id;
@@ -61,5 +80,13 @@ public class User {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getRecoveryKeywordHash() {
+        return recoveryKeywordHash;
+    }
+
+    public void setRecoveryKeywordHash(String recoveryKeywordHash) {
+        this.recoveryKeywordHash = recoveryKeywordHash;
     }
 }
